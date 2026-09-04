@@ -1,6 +1,5 @@
 import io, os, base64
 import requests as http_requests
-import sounddevice as sd
 import soundfile as sf
 import tempfile
 from os import remove
@@ -107,6 +106,8 @@ class LinguaFlowTTS:
             return audio_bytes, "audio/mpeg"
 
     def speak(self, text: str) -> None:
+        import sounddevice as sd
+
         audio_bytes, _ = self.generate_audio_bytes(text)
         suffix = ".wav" if self.__method in ("yarngpt_colab", "mms_tts") else ".mp3"
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
