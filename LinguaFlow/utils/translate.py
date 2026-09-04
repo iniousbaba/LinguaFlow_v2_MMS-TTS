@@ -1,4 +1,6 @@
+import time
 from deep_translator import GoogleTranslator
+from deep_translator.exceptions import RequestError, TooManyRequests, TranslationNotFound
 from utils.decorators import calc_execution_time
 from utils.languages import get_language_code
 
@@ -28,13 +30,23 @@ class LinguaFlowTranslate:
     def __repr__(self):
         return f"Translate(source={self.source_language}, target={self.target_language}, method={self.method})"
 
-    def __translate_with_googledeep(self, text: str) -> str:
-        """Translate using deep_translator (no httpcore dependency, reliable)."""
+    def __translate_with_googledeep(self, text: str, max_attempts: int = 3) -> str:
+        """Translate using deep_translator. Retries on transient scraping
+        failures (Google's unofficial translate endpoint occasionally returns
+        a page deep_translator can't parse, or rate-limits the request)."""
         translator = GoogleTranslator(
             source=self.__source_language_code,
             target=self.__target_language_code
         )
-        return translator.translate(text)
+        last_error = None
+        for attempt in range(max_attempts):
+            try:
+                return translator.translate(text)
+            except (TranslationNotFound, TooManyRequests, RequestError) as e:
+                last_error = e
+                if attempt < max_attempts - 1:
+                    time.sleep(1.5)
+        raise last_error
 
     def __translate_with_googlecloud(self, text: str) -> str:
         """Translate using Google Cloud Translation API (lazy import)."""
