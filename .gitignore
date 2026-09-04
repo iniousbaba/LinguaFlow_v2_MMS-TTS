@@ -1,0 +1,8 @@
+LinguaFlow/venv/
+LinguaFlow/temp_audio/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.claude/
+models/
