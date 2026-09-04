@@ -4,7 +4,7 @@ import os, base64, time
 import speech_recognition as sr
 import av, numpy as np, soundfile as sf
 from utils.translate import LinguaFlowTranslate
-from utils.speaker import LinguaFlowTTS
+from utils.speaker import LinguaFlowTTS, preload_mms_models
 from utils.languages import get_language, SUPPORTED_LANGUAGES, get_language_code
 
 # Resolve paths relative to this file so they work regardless of CWD
@@ -14,6 +14,9 @@ app = Flask(__name__, template_folder=os.path.join(SCRIPT_DIR, "templates"))
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 app.config["UPLOAD_FOLDER"] = os.path.join(SCRIPT_DIR, "temp_audio")
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
+# Load MMS-TTS model(s) once at boot, not on the first user request.
+preload_mms_models()
 
 
 def webm_to_wav(input_path, output_path):

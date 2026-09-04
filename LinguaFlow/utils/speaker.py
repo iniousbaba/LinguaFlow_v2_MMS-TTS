@@ -43,6 +43,14 @@ def _get_mms_model(lang_code: str):
     return _MMS_MODEL_CACHE[lang_code]
 
 
+def preload_mms_models():
+    """Load all MMS-TTS checkpoints once at process startup, so the slow
+    first-time download/load happens during boot instead of blocking a
+    live user request."""
+    for lang_code in _MMS_LANG_MAP:
+        _get_mms_model(lang_code)
+
+
 def _mms_tts(text: str, lang_code: str) -> bytes:
     """Synthesize speech locally using Facebook MMS-TTS. Returns WAV bytes."""
     import torch
