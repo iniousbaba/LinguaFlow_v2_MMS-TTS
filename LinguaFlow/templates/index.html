@@ -11,13 +11,24 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --accent: #60a5fa;
+            --accent-2: #a78bfa;
+            --info: #60a5fa;
+            --degraded: #fbbf24;
+            --card: rgba(13, 27, 42, 0.7);
+            --panel: rgba(30, 41, 59, 0.6);
+            --text: #e0e7ff;
+            --muted: #94a3b8;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0a1929 0%, #1a2942 50%, #2d4263 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: #e0e7ff;
+            color: var(--text);
         }
 
         .container {
@@ -25,6 +36,7 @@
             margin: 0 auto;
             padding: 20px;
             flex: 1;
+            width: 100%;
         }
 
         header {
@@ -39,7 +51,7 @@
 
         h1 {
             font-size: 3em;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -47,12 +59,12 @@
         }
 
         .subtitle {
-            color: #94a3b8;
+            color: var(--muted);
             font-size: 1.1em;
         }
 
         .main-card {
-            background: rgba(13, 27, 42, 0.7);
+            background: var(--card);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
@@ -86,19 +98,17 @@
             border-radius: 10px;
             border: 2px solid rgba(96, 165, 250, 0.3);
             background: rgba(30, 41, 59, 0.8);
-            color: #e0e7ff;
+            color: var(--text);
             font-size: 1em;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        select:hover {
-            border-color: rgba(96, 165, 250, 0.6);
-        }
+        select:hover { border-color: rgba(96, 165, 250, 0.6); }
 
         select:focus {
             outline: none;
-            border-color: #60a5fa;
+            border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
         }
 
@@ -129,45 +139,33 @@
             box-shadow: 0 12px 32px rgba(59, 130, 246, 0.6);
         }
 
-        .mic-button:active {
-            transform: scale(0.95);
-        }
+        .mic-button:active { transform: scale(0.95); }
 
+        /* "Live" state — magenta, deliberately not red */
         .mic-button.recording {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: linear-gradient(135deg, #d946ef 0%, #a21caf 100%);
             animation: pulse 1.5s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
-            }
-            50% {
-                box-shadow: 0 12px 40px rgba(239, 68, 68, 0.8);
-            }
+            0%, 100% { box-shadow: 0 8px 24px rgba(217, 70, 239, 0.45); }
+            50%      { box-shadow: 0 12px 40px rgba(217, 70, 239, 0.85); }
         }
 
-        .mic-icon {
-            width: 50px;
-            height: 50px;
-            fill: white;
-        }
+        .mic-button:disabled { opacity: 0.6; cursor: default; }
+
+        .mic-icon { width: 50px; height: 50px; fill: white; }
 
         .status-text {
             margin-top: 20px;
             font-size: 1.1em;
-            color: #94a3b8;
+            color: var(--muted);
             font-weight: 500;
         }
 
-        .status-text.recording {
-            color: #fca5a5;
-        }
+        .status-text.recording { color: #f0abfc; }
 
-        .results-section {
-            margin-top: 30px;
-            display: none;
-        }
+        .results-section { margin-top: 30px; display: none; }
 
         .results-section.show {
             display: block;
@@ -175,42 +173,45 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .result-box {
-            background: rgba(30, 41, 59, 0.6);
+            background: var(--panel);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            border-left: 4px solid #60a5fa;
+            border-left: 4px solid var(--accent);
         }
+
+        .result-box.pending { border-left-color: var(--degraded); }
 
         .result-label {
             font-size: 0.85em;
-            color: #94a3b8;
+            color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 8px;
         }
 
-        .result-text {
-            font-size: 1.1em;
-            color: #e0e7ff;
-            line-height: 1.6;
+        .result-text { font-size: 1.1em; color: var(--text); line-height: 1.6; }
+        .result-text.muted { color: var(--muted); font-style: italic; }
+
+        .engine-tag {
+            display: inline-block;
+            font-size: 0.7em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            border-radius: 999px;
+            padding: 2px 8px;
+            margin-left: 8px;
+            vertical-align: middle;
         }
 
-        .audio-player {
-            margin-top: 20px;
-            width: 100%;
-        }
+        .audio-player { margin-top: 20px; width: 100%; }
 
         audio {
             width: 100%;
@@ -218,35 +219,85 @@
             background: rgba(30, 41, 59, 0.8);
         }
 
-        .error-message {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            color: #fca5a5;
-            padding: 15px 20px;
+        .audio-unavailable {
+            margin-top: 16px;
+            padding: 14px 16px;
             border-radius: 10px;
-            margin-top: 20px;
-            display: none;
+            background: var(--panel);
+            color: var(--muted);
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .error-message.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
+        .audio-unavailable svg { width: 18px; height: 18px; fill: var(--muted); flex-shrink: 0; }
+
+        /* ── Toast / notice — glassy, matches the card. Never red. ── */
+        .toast-wrap {
+            position: fixed;
+            left: 50%;
+            bottom: 28px;
+            transform: translateX(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: min(92vw, 460px);
+            pointer-events: none;
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-            color: #60a5fa;
+        .toast {
+            pointer-events: auto;
+            background: rgba(13, 27, 42, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+            border-left: 4px solid var(--info);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--text);
+            font-size: 0.98em;
+            line-height: 1.45;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: toastIn 0.35s ease;
         }
 
-        .loading.show {
-            display: block;
+        .toast.degraded { border-left-color: var(--degraded); border-color: rgba(251, 191, 36, 0.35); }
+        .toast .toast-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; }
+        .toast.info .toast-icon { fill: var(--info); }
+        .toast.degraded .toast-icon { fill: var(--degraded); }
+        .toast .toast-msg { flex: 1; }
+
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.2em;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 2px;
         }
+
+        .toast.hide { animation: toastOut 0.3s ease forwards; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(16px); }
+        }
+
+        .loading { display: none; text-align: center; margin-top: 20px; color: var(--accent); }
+        .loading.show { display: block; }
 
         .spinner {
             border: 3px solid rgba(96, 165, 250, 0.3);
-            border-top: 3px solid #60a5fa;
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -254,35 +305,15 @@
             margin: 0 auto 15px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #64748b;
-            font-size: 0.9em;
-        }
+        footer { text-align: center; padding: 20px; color: #64748b; font-size: 0.9em; }
 
         @media (max-width: 768px) {
-            .language-selector {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            .main-card {
-                padding: 25px;
-            }
-
-            .mic-button {
-                width: 100px;
-                height: 100px;
-            }
+            .language-selector { grid-template-columns: 1fr; }
+            h1 { font-size: 2em; }
+            .main-card { padding: 25px; }
+            .mic-button { width: 100px; height: 100px; }
         }
     </style>
 </head>
@@ -332,21 +363,26 @@
                 <p>Processing your speech...</p>
             </div>
 
-            <div id="error-message" class="error-message"></div>
-
             <div id="results-section" class="results-section">
                 <div class="result-box">
                     <div class="result-label">Recognized (<span id="detected-lang"></span>)</div>
                     <div id="recognized-text" class="result-text"></div>
                 </div>
 
-                <div class="result-box">
-                    <div class="result-label">Translation (<span id="target-lang"></span>)</div>
+                <div class="result-box" id="translation-box">
+                    <div class="result-label">
+                        Translation (<span id="target-lang"></span>)<span id="translation-engine" class="engine-tag" hidden></span>
+                    </div>
                     <div id="translated-text" class="result-text"></div>
                 </div>
 
-                <div class="audio-player">
+                <div class="audio-player" id="audio-wrap">
                     <audio id="audio-output" controls></audio>
+                </div>
+
+                <div class="audio-unavailable" id="audio-unavailable" hidden>
+                    <svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                    <span id="audio-unavailable-text">Audio isn't available right now.</span>
                 </div>
             </div>
         </div>
@@ -356,17 +392,18 @@
         <p>LinguaFlow &copy; 2024 | Real-time Speech Translation System</p>
     </footer>
 
+    <div class="toast-wrap" id="toast-wrap"></div>
+
     <script>
         let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
 
+        const $ = (id) => document.getElementById(id);
+
         async function toggleRecording() {
-            if (!isRecording) {
-                await startRecording();
-            } else {
-                stopRecording();
-            }
+            if (!isRecording) { await startRecording(); }
+            else { stopRecording(); }
         }
 
         async function startRecording() {
@@ -375,30 +412,23 @@
                 mediaRecorder = new MediaRecorder(stream);
                 audioChunks = [];
 
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
                 mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const mime = mediaRecorder.mimeType || 'audio/webm';
+                    const audioBlob = new Blob(audioChunks, { type: mime });
                     await processAudio(audioBlob);
-                    
-                    // Stop all tracks
-                    stream.getTracks().forEach(track => track.stop());
+                    stream.getTracks().forEach(t => t.stop());
                 };
 
                 mediaRecorder.start();
                 isRecording = true;
 
-                // Update UI
-                document.getElementById('mic-button').classList.add('recording');
-                document.getElementById('status-text').textContent = 'Recording... Click to stop';
-                document.getElementById('status-text').classList.add('recording');
-                document.getElementById('error-message').classList.remove('show');
-                document.getElementById('results-section').classList.remove('show');
-
+                $('mic-button').classList.add('recording');
+                $('status-text').textContent = 'Recording... Click to stop';
+                $('status-text').classList.add('recording');
+                $('results-section').classList.remove('show');
             } catch (error) {
-                showError('Microphone access denied. Please allow microphone permissions.');
+                showToast('info', 'Microphone access is blocked. Allow microphone permission in your browser, then try again.');
             }
         }
 
@@ -406,67 +436,130 @@
             if (mediaRecorder && isRecording) {
                 mediaRecorder.stop();
                 isRecording = false;
-
-                // Update UI
-                document.getElementById('mic-button').classList.remove('recording');
-                document.getElementById('status-text').textContent = 'Processing...';
-                document.getElementById('status-text').classList.remove('recording');
+                $('mic-button').classList.remove('recording');
+                $('status-text').textContent = 'Processing...';
+                $('status-text').classList.remove('recording');
             }
         }
 
         async function processAudio(audioBlob) {
             const formData = new FormData();
-            formData.append('audio', audioBlob, 'recording.mp3');
-            formData.append('source_language', document.getElementById('source-language').value);
-            formData.append('target_language', document.getElementById('target-language').value);
+            formData.append('audio', audioBlob, 'recording.webm');
+            formData.append('source_language', $('source-language').value);
+            formData.append('target_language', $('target-language').value);
 
-            // Show loading
-            document.getElementById('loading').classList.add('show');
+            $('loading').classList.add('show');
+            $('mic-button').disabled = true;
 
             try {
-                const response = await fetch('/process_audio', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                // Hide loading
-                document.getElementById('loading').classList.remove('show');
-
-                if (response.ok && data.success) {
-                    displayResults(data);
-                    document.getElementById('status-text').textContent = 'Click to start recording';
-                } else {
-                    showError(data.error || 'An error occurred during processing');
-                    document.getElementById('status-text').textContent = 'Click to try again';
-                }
-
+                const response = await fetch('/process_audio', { method: 'POST', body: formData });
+                let data;
+                try { data = await response.json(); }
+                catch (_) { data = { status: 'unavailable', notice: 'Something went wrong on the server. Please try again shortly.' }; }
+                handleResponse(data);
             } catch (error) {
-                document.getElementById('loading').classList.remove('show');
-                showError('Network error. Please check your connection and try again.');
-                document.getElementById('status-text').textContent = 'Click to try again';
+                showToast('info', 'Connection issue — check your network and try again.');
+                $('status-text').textContent = 'Click to try again';
+            } finally {
+                $('loading').classList.remove('show');
+                $('mic-button').disabled = false;
             }
         }
 
-        function displayResults(data) {
-            document.getElementById('detected-lang').textContent = data.source_language.toUpperCase();
-            document.getElementById('target-lang').textContent = data.target_language.toUpperCase();
-            document.getElementById('recognized-text').textContent = data.recognized_text;
-            document.getElementById('translated-text').textContent = data.translated_text;
+        function handleResponse(data) {
+            const status = data.status || 'unavailable';
 
-            // Set audio source
-            const audioElement = document.getElementById('audio-output');
-            audioElement.src = 'data:audio/mp3;base64,' + data.audio;
+            // Cases where there's nothing worth showing in the results panel.
+            if (status === 'no_speech' || status === 'speech_down' ||
+                (status === 'unavailable' && !data.recognized_text)) {
+                $('results-section').classList.remove('show');
+                showToast(status === 'no_speech' ? 'info' : 'info',
+                          data.notice || 'Please try again.');
+                $('status-text').textContent = 'Click to try again';
+                return;
+            }
 
-            // Show results
-            document.getElementById('results-section').classList.add('show');
+            displayResults(data);
+
+            if (data.notice) {
+                const kind = (status === 'degraded_audio') ? 'degraded' : 'info';
+                showToast(kind, data.notice);
+            }
+            $('status-text').textContent = 'Click to start recording';
         }
 
-        function showError(message) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.classList.add('show');
+        function displayResults(data) {
+            $('detected-lang').textContent = (data.source_language || '').toUpperCase();
+            $('target-lang').textContent = (data.target_language || '').toUpperCase();
+            $('recognized-text').textContent = data.recognized_text || '—';
+
+            // Translation
+            const tBox = $('translation-box');
+            const tText = $('translated-text');
+            const tEngine = $('translation-engine');
+            if (data.translated_text) {
+                tText.textContent = data.translated_text;
+                tText.classList.remove('muted');
+                tBox.classList.remove('pending');
+                if (data.translation_engine && data.translation_engine !== 'passthrough') {
+                    tEngine.textContent = 'via ' + data.translation_engine;
+                    tEngine.hidden = false;
+                } else {
+                    tEngine.hidden = true;
+                }
+            } else {
+                tText.textContent = 'Not available right now — please try again shortly.';
+                tText.classList.add('muted');
+                tBox.classList.add('pending');
+                tEngine.hidden = true;
+            }
+
+            // Audio
+            const audioWrap = $('audio-wrap');
+            const audioEl = $('audio-output');
+            const audioMissing = $('audio-unavailable');
+            const audioMissingText = $('audio-unavailable-text');
+
+            if (data.audio) {
+                const mime = data.audio_mime || 'audio/mpeg';
+                audioEl.src = `data:${mime};base64,${data.audio}`;
+                audioWrap.hidden = false;
+                audioMissing.hidden = true;
+            } else {
+                audioEl.removeAttribute('src');
+                audioWrap.hidden = true;
+                audioMissing.hidden = false;
+                audioMissingText.textContent = data.translated_text
+                    ? "Audio isn't available for this language right now — the translation above is ready."
+                    : "Audio isn't available right now.";
+            }
+
+            $('results-section').classList.add('show');
+        }
+
+        // ── Toasts ───────────────────────────────────────────────────────────
+        const ICONS = {
+            info: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>',
+            degraded: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>'
+        };
+
+        function showToast(kind, message, timeout = 6000) {
+            const wrap = $('toast-wrap');
+            const el = document.createElement('div');
+            el.className = `toast ${kind === 'degraded' ? 'degraded' : 'info'}`;
+            el.innerHTML = `
+                <svg class="toast-icon" viewBox="0 0 24 24">${ICONS[kind] || ICONS.info}</svg>
+                <div class="toast-msg"></div>
+                <button class="toast-close" aria-label="Dismiss">&times;</button>`;
+            el.querySelector('.toast-msg').textContent = message;
+
+            const dismiss = () => {
+                el.classList.add('hide');
+                setTimeout(() => el.remove(), 300);
+            };
+            el.querySelector('.toast-close').addEventListener('click', dismiss);
+            wrap.appendChild(el);
+            if (timeout) setTimeout(dismiss, timeout);
         }
     </script>
 </body>

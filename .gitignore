@@ -6,3 +6,7 @@ __pycache__/
 .env
 .claude/
 models/
+AWS_DEPLOY.md
+*.pem
+linguaflow-key.pem
+DEPLOY_SECRETS.md
