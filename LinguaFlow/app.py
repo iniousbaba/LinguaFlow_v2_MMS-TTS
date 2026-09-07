@@ -42,9 +42,10 @@ print(f"[app] Claude fallback available: {claude_available()}")
 
 
 # ── Notices shown to the user (blue = info, amber = degraded). Never red. ──────
+# `no_audio` intentionally has no notice — the translation still shows, and the
+# degraded-audio disclaimer already covers "audio may not be perfect".
 NOTICE = {
     "degraded_audio": "Audio is using a fallback voice — pronunciation may be a little off.",
-    "no_audio": "Translation is ready, but audio isn't available for this language right now.",
     "no_translation": "Translation service is unavailable right now. Please try again in a moment.",
     "no_speech": "Didn't quite catch that — please speak clearly and try again.",
     "speech_down": "The speech-recognition service is unavailable right now. Please try again shortly.",

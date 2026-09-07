@@ -198,19 +198,6 @@
         .result-text { font-size: 1.1em; color: var(--text); line-height: 1.6; }
         .result-text.muted { color: var(--muted); font-style: italic; }
 
-        .engine-tag {
-            display: inline-block;
-            font-size: 0.7em;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            border: 1px solid rgba(148, 163, 184, 0.35);
-            border-radius: 999px;
-            padding: 2px 8px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
         .audio-player { margin-top: 20px; width: 100%; }
 
         audio {
@@ -218,20 +205,6 @@
             border-radius: 10px;
             background: rgba(30, 41, 59, 0.8);
         }
-
-        .audio-unavailable {
-            margin-top: 16px;
-            padding: 14px 16px;
-            border-radius: 10px;
-            background: var(--panel);
-            color: var(--muted);
-            font-size: 0.95em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .audio-unavailable svg { width: 18px; height: 18px; fill: var(--muted); flex-shrink: 0; }
 
         /* ── Toast / notice — glassy, matches the card. Never red. ── */
         .toast-wrap {
@@ -370,19 +343,12 @@
                 </div>
 
                 <div class="result-box" id="translation-box">
-                    <div class="result-label">
-                        Translation (<span id="target-lang"></span>)<span id="translation-engine" class="engine-tag" hidden></span>
-                    </div>
+                    <div class="result-label">Translation (<span id="target-lang"></span>)</div>
                     <div id="translated-text" class="result-text"></div>
                 </div>
 
                 <div class="audio-player" id="audio-wrap">
                     <audio id="audio-output" controls></audio>
-                </div>
-
-                <div class="audio-unavailable" id="audio-unavailable" hidden>
-                    <svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-                    <span id="audio-unavailable-text">Audio isn't available right now.</span>
                 </div>
             </div>
         </div>
@@ -496,42 +462,26 @@
             // Translation
             const tBox = $('translation-box');
             const tText = $('translated-text');
-            const tEngine = $('translation-engine');
             if (data.translated_text) {
                 tText.textContent = data.translated_text;
                 tText.classList.remove('muted');
                 tBox.classList.remove('pending');
-                if (data.translation_engine && data.translation_engine !== 'passthrough') {
-                    tEngine.textContent = 'via ' + data.translation_engine;
-                    tEngine.hidden = false;
-                } else {
-                    tEngine.hidden = true;
-                }
             } else {
                 tText.textContent = 'Not available right now — please try again shortly.';
                 tText.classList.add('muted');
                 tBox.classList.add('pending');
-                tEngine.hidden = true;
             }
 
-            // Audio
+            // Audio — show the player when we have audio, otherwise just hide it.
             const audioWrap = $('audio-wrap');
             const audioEl = $('audio-output');
-            const audioMissing = $('audio-unavailable');
-            const audioMissingText = $('audio-unavailable-text');
-
             if (data.audio) {
                 const mime = data.audio_mime || 'audio/mpeg';
                 audioEl.src = `data:${mime};base64,${data.audio}`;
                 audioWrap.hidden = false;
-                audioMissing.hidden = true;
             } else {
                 audioEl.removeAttribute('src');
                 audioWrap.hidden = true;
-                audioMissing.hidden = false;
-                audioMissingText.textContent = data.translated_text
-                    ? "Audio isn't available for this language right now — the translation above is ready."
-                    : "Audio isn't available right now.";
             }
 
             $('results-section').classList.add('show');
